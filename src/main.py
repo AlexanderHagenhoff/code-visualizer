@@ -14,7 +14,7 @@ if __name__ == "__main__":
     file_path = found_file
     output_image_path = "output_image.png"
 
-    generator = CodeImageGenerator(file_path, 200, 1000)
+    generator = CodeImageGenerator(file_path, 500, 1000)
     generator.generate_image()
     generator.save_image(output_image_path)
 
