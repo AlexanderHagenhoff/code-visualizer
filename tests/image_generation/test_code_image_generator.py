@@ -15,7 +15,7 @@ class TestCodeImageGenerator(unittest.TestCase):
         self.generator = CodeImageGenerator(500, 1000, 10)
 
     def test_image_generation_matches_reference(self):
-        expected_reference_hash = "3c48d6946a960cb0faa5814c0da832ed"
+        expected_reference_hash = "975ae340d0385dc056d1f87c5499720c"
         generated_image = self.generator.generate_image(self.code_file)
         generated_hash = self._calculate_image_hash(generated_image)
 

@@ -7,14 +7,16 @@ class CodeImageGenerator:
             self,
             image_width: int,
             image_height: int,
-            point_size: int = 3,
+            point_width: int = 3,
+            point_height: int = 3,
             background_color: tuple[int, int, int] = (30, 31, 34),
             text_color: tuple[int, int, int] = (188, 190, 196),
             tab_size: int = 5
     ):
         self.image_width = image_width
         self.image_height = image_height
-        self.point_size = point_size
+        self.point_width = point_width
+        self.point_height = point_height
         self.background_color = background_color
         self.text_color = text_color
         self.tab_size = tab_size
@@ -32,7 +34,7 @@ class CodeImageGenerator:
     def _draw_lines(self, draw: ImageDraw.Draw, lines: list[str], y_offset: int):
         for line in lines:
             self._draw_line(draw, line, y_offset)
-            y_offset += self.point_size
+            y_offset += self.point_height
 
     def _draw_line(self, draw: ImageDraw.Draw, line: str, y_offset: int):
         x_offset = 0
@@ -51,10 +53,10 @@ class CodeImageGenerator:
         return self.text_color
 
     def _draw_point(self, draw: ImageDraw.Draw, x: int, y: int, color: tuple[int, int, int]):
-        draw.rectangle([x, y, x + self.point_size, y + self.point_size], fill=color)
+        draw.rectangle([x, y, x + self.point_width, y + self.point_height], fill=color)
 
     def _get_char_offset(self, char: str) -> int:
         if char == '\t':
-            return self.tab_size * self.point_size \
+            return self.tab_size * self.point_width \
 
-        return self.point_size
+        return self.point_width
