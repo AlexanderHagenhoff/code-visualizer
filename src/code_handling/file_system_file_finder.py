@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-class FileFinder:
+class FileSystemFileFinder:
     DIRECTORY_NOT_FOUND_ERROR = "The directory {directory} does not exist."
     EMPTY_FILE_PATTERN_ERROR = "No file patterns provided. Please provide at least one file pattern."
 

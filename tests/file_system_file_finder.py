@@ -3,10 +3,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.file_finder.file_finder import FileFinder
+from src.code_handling.file_system_file_finder import FileSystemFileFinder
 
 
-class TestFileFinder(unittest.TestCase):
+class TestFileSystemFileFinder(unittest.TestCase):
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
         self.sub_dir = Path(self.test_dir) / 'sub_dir'
@@ -26,7 +26,7 @@ class TestFileFinder(unittest.TestCase):
         shutil.rmtree(self.test_dir)
 
     def test_filter_out_unwanted_files(self):
-        file_finder = FileFinder(self.test_dir)
+        file_finder = FileSystemFileFinder(self.test_dir)
 
         found_files = file_finder.find_files(['*.java'])
 
@@ -37,7 +37,7 @@ class TestFileFinder(unittest.TestCase):
         self.assertNotIn(self.txt_file, found_files)
 
     def test_find_multiple_files_by_different_patterns(self):
-        file_finder = FileFinder(self.test_dir)
+        file_finder = FileSystemFileFinder(self.test_dir)
 
         found_files = file_finder.find_files(['*.java', '*.txt'])
 
@@ -50,7 +50,7 @@ class TestFileFinder(unittest.TestCase):
     def test_empty_directory(self):
         empty_dir = tempfile.mkdtemp()
 
-        file_finder = FileFinder(empty_dir)
+        file_finder = FileSystemFileFinder(empty_dir)
         java_files = file_finder.find_files(['*.java'])
 
         self.assertEqual(len(java_files), 0)
@@ -60,7 +60,7 @@ class TestFileFinder(unittest.TestCase):
     def test_empty_file_pattern(self):
         empty_dir = tempfile.mkdtemp()
 
-        file_finder = FileFinder(empty_dir)
+        file_finder = FileSystemFileFinder(empty_dir)
 
         with self.assertRaises(ValueError):
             file_finder.find_files([])
@@ -69,7 +69,7 @@ class TestFileFinder(unittest.TestCase):
 
     def test_non_existent_directory(self):
         non_existent_dir = "non_existent_directory"
-        file_finder = FileFinder(non_existent_dir)
+        file_finder = FileSystemFileFinder(non_existent_dir)
 
         with self.assertRaises(FileNotFoundError):
             file_finder.find_files(['*.java'])
