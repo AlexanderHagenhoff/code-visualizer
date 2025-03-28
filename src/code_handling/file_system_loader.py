@@ -1,6 +1,7 @@
+from src.code_handling.CodeProvider import CodeProvider
 from src.code_handling.code_file import CodeFile
 
-class FileSystemLoader:
+class FileSystemLoader(CodeProvider):
 
     def load_code_files(self, file_paths: list[str]) -> list[CodeFile]:
         return [self.load_code_file(path) for path in file_paths]

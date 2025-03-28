@@ -1,6 +1,5 @@
 from code_handling.file_system_file_finder import FileSystemFileFinder
 from image_generation.code_image_generator import CodeImageGenerator
-from src.code_handling.code_file import CodeFile
 from src.code_handling.file_system_loader import FileSystemLoader
 
 if __name__ == "__main__":
@@ -18,6 +17,5 @@ if __name__ == "__main__":
     code_files = loader.load_code_files(found_files)
 
     generator = CodeImageGenerator(500, 1000, 10)
-    code_files[0] = CodeFile("ttt\n  t x a b\n\n\n\ttest test\nxx", "test.java")
     image = generator.generate_image(code_files[0])
     image.save("expected_simple_file_result.png")
