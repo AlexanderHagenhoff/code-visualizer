@@ -10,7 +10,7 @@ class CodeImageGenerator:
             point_size: int = 3,
             background_color: tuple[int, int, int] = (30, 31, 34),
             text_color: tuple[int, int, int] = (188, 190, 196),
-            tab_size: int = 3
+            tab_size: int = 5
     ):
         self.image_width = image_width
         self.image_height = image_height
@@ -45,7 +45,7 @@ class CodeImageGenerator:
         self._draw_point(draw, x_offset, y_offset, color)
 
     def _get_char_color(self, char: str) -> tuple[int, int, int]:
-        if char in (' ', '\t'):
+        if char in (' ', '\t', '\n'):
             return self.background_color
 
         return self.text_color
