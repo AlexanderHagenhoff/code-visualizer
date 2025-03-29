@@ -8,10 +8,11 @@ def sort_images_by_height(images_with_files):
     return [(image, file) for height, image, file in decorated]
 
 if __name__ == "__main__":
-    directory = r'D:\dev\spring-boot\spring-boot-project\spring-boot-actuator'
+    #directory = r'D:\dev\spring-boot\spring-boot-project\spring-boot-actuator'
+    directory = r'D:/Python/dev/code-visualizer'
 
     loader = FileSystemLoader()
-    found_files = loader.load_code_files([directory], ["*.java", "pom.xml"])
+    found_files = loader.load_code_files([directory], ["*.py"])
 
     generator = CodeImageGenerator(400, 300, 3, 5)
 
