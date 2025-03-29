@@ -17,7 +17,7 @@ if __name__ == "__main__":
     generator = CodeImageGenerator(500, 1000, 3, 5)
 
     composer = HtmlImageComposer(
-        output_dir="html_output",
+        output_directory="html_output",
         columns=20,
         thumbnail_size=(500, 1000)
     )
