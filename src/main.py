@@ -14,7 +14,7 @@ if __name__ == "__main__":
     loader = FileSystemLoader()
     found_files = loader.load_code_files([directory], ["*.java", "pom.xml"])
 
-    generator = CodeImageGenerator(500, 1000, 3, 5)
+    generator = CodeImageGenerator(400, 300, 3, 5)
 
     composer = HtmlImageComposer(
         output_directory="../output/html_output",
