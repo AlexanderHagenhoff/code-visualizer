@@ -3,7 +3,7 @@ import fnmatch
 from typing import List, Iterable
 from pathlib import Path
 
-from src.code_handling.CodeProvider import CodeProvider
+from src.code_handling.code_provider import CodeProvider
 from src.code_handling.code_file import CodeFile
 
 

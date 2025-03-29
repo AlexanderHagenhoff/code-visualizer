@@ -2,7 +2,7 @@ import requests
 import re
 import fnmatch
 from typing import List, Optional
-from src.code_handling.CodeProvider import CodeProvider
+from src.code_handling.code_provider import CodeProvider
 from src.code_handling.code_file import CodeFile
 
 class GitHubFileLoader(CodeProvider):
