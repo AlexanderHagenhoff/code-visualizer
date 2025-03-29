@@ -1,6 +1,6 @@
+from image_composition.html_image_composer import HtmlImageComposer
 from image_generation.code_image_generator import CodeImageGenerator
 from src.code_handling.file_system_loader import FileSystemLoader
-from src.image_composition.image_concatenator import ImageConcatenator
 
 if __name__ == "__main__":
     directory = r'D:\dev\spring-boot\spring-boot-project\spring-boot-actuator'
@@ -16,14 +16,14 @@ if __name__ == "__main__":
 
     generator = CodeImageGenerator(500, 1000, 3, 5)
 
-    concatenator = ImageConcatenator(
+    composer = HtmlImageComposer(
+        output_directory="../output/html_output",
         columns=20,
-        max_thumbnail_size=(150, 150)
+        thumbnail_size=(500, 1000)
     )
 
     for file in found_files:
         image = generator.generate_image(file)
-        concatenator.add_image(image)
+        composer.add_image(image, file)
 
-    result_image = concatenator.concatenate()
-    result_image.save("combined_result.png")
+    composer.generate_html()

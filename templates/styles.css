@@ -1,0 +1,41 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat({{ columns }}, 1fr);
+    gap: 2px;
+    padding: 2px;
+}
+
+.grid-item {
+    position: relative;
+    border: 1px solid #ddd;
+    padding: 2px;
+    transition: all 0.3s ease;
+}
+
+.filename {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 5px 10px;
+    font-family: Arial;
+    font-size: 20px;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.grid-item:hover .filename {
+    opacity: 1;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    display: block;
+    position: relative;
+    z-index: 1;
+}
