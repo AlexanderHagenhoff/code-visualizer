@@ -120,7 +120,6 @@ class TestHtmlImageComposer(unittest.TestCase):
         self.assertIn('<div class="grid-container">', html_content)
         self.assertNotIn('class="grid-item"', html_content)
 
-        # Verify CSS file exists
         css_path = Path(self.temp_dir.name) / "styles.css"
         self.assertTrue(css_path.exists())
 
