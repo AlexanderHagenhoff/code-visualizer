@@ -1,21 +1,29 @@
-from code_handling.file_system_file_finder import FileSystemFileFinder
 from image_generation.code_image_generator import CodeImageGenerator
 from src.code_handling.file_system_loader import FileSystemLoader
+from src.image_composition.image_concatenator import ImageConcatenator
 
 if __name__ == "__main__":
     directory = r'D:\dev\spring-boot\spring-boot-project\spring-boot-actuator'
 
-    file_finder = FileSystemFileFinder(directory)
-    found_files = file_finder.find_files(["*.java"])
-
-    for found_file in found_files:
-        print(found_file)
+    urls = [
+        "https://github.com/AlexanderHagenhoff/spring-boot-postgres-archetype"
+    ]
 
     output_image_path = "output_image.png"
 
     loader = FileSystemLoader()
-    code_files = loader.load_code_files(found_files)
+    found_files = loader.load_code_files([directory], ["*.java", "pom.xml"])
 
-    generator = CodeImageGenerator(500, 1000, 10)
-    image = generator.generate_image(code_files[0])
-    image.save("expected_simple_file_result.png")
+    generator = CodeImageGenerator(500, 1000, 3, 5)
+
+    concatenator = ImageConcatenator(
+        columns=20,
+        max_thumbnail_size=(150, 150)
+    )
+
+    for file in found_files:
+        image = generator.generate_image(file)
+        concatenator.add_image(image)
+
+    result_image = concatenator.concatenate()
+    result_image.save("combined_result.png")
