@@ -12,14 +12,19 @@ if __name__ == "__main__":
     directory = r'D:/Python/dev/code-visualizer'
 
     loader = FileSystemLoader()
-    found_files = loader.load_code_files([directory], ["*.py"])
+    ignore_patterns = [
+        "**/__pycache__/**",
+        "**/venv/**"
+    ]
+
+    found_files = loader.load_code_files([directory], ["*.py"], ignore_patterns=ignore_patterns)
 
     generator = CodeImageGenerator(400, 300, 3, 5)
 
     images_with_files = []
     for file in found_files:
         image = generator.generate_image(file)
-        images_with_files.append((image, file))  # Nur (image, file) speichern
+        images_with_files.append((image, file))
 
     sorted_images = sort_images_by_height(images_with_files)
 
