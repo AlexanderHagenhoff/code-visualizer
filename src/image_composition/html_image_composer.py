@@ -31,17 +31,17 @@ class HtmlImageComposer:
         thumbnail.save(save_path)
         self.image_paths.append((save_path, code_file.filename))
 
-    def _process_image(self, img: Image.Image) -> Image.Image:
-        img.thumbnail(self.thumbnail_size)
-        return self._add_border(img)
+    def _process_image(self, image: Image.Image) -> Image.Image:
+        image.thumbnail(self.thumbnail_size)
+        return self._add_border(image)
 
-    def _add_border(self, img: Image.Image) -> Image.Image:
+    def _add_border(self, image: Image.Image) -> Image.Image:
         new_size = (
-            img.width + self.border_width,
-            img.height + self.border_width
+            image.width + self.border_width,
+            image.height + self.border_width
         )
         bordered = Image.new("RGB", new_size, self.border_color)
-        bordered.paste(img, (self.border_width, self.border_width))
+        bordered.paste(image, (self.border_width, self.border_width))
         return bordered
 
     def generate_html(self):
@@ -90,8 +90,8 @@ class HtmlImageComposer:
         html.append('</style>\n</head>\n<body>')
         html.append('<div class="grid-container">')
 
-        for img_path, filename in self.image_paths:
-            relative_path = img_path.relative_to(self.output_dir)
+        for image_path, filename in self.image_paths:
+            relative_path = image_path.relative_to(self.output_dir)
             display_name = Path(filename).name if filename else "unnamed"
             html.append(f'''
                 <div class="grid-item">
@@ -104,7 +104,7 @@ class HtmlImageComposer:
 
         html.append('</div>\n</body>\n</html>')
 
-        with open(self.output_dir / 'index.html', 'w') as f:
-            f.write('\n'.join(html))
+        with open(self.output_dir / 'index.html', 'w') as file:
+            file.write('\n'.join(html))
 
         print(f"HTML generated at: {(self.output_dir / 'index.html').absolute()}")
