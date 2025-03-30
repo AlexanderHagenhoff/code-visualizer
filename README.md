@@ -34,3 +34,11 @@
 
 - spliced image example
 *![image_example.png](resources/images/image_example.png)*
+
+## License
+
+This project is licensed under the [Mozilla Public License 2.0](https://opensource.org/licenses/MPL-2.0). You are free to use, modify, and distribute this project as long as you provide attribution to the original authors.
+
+### AI-Training Restriction
+
+This project and its contents may not be used for training artificial intelligence models, machine learning algorithms, or any other data-driven models without explicit written permission from the original author.
