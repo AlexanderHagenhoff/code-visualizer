@@ -3,11 +3,11 @@ import fnmatch
 from typing import List, Iterable
 from pathlib import Path
 
-from src.code_handling.code_provider import CodeProvider
-from src.code_handling.code_file import CodeFile
+from src.main.python.code_loading.code_file import CodeFile
+from src.main.python.code_loading.code_loader import CodeLoader
 
 
-class FileSystemLoader(CodeProvider):
+class FileSystemLoader(CodeLoader):
     def load_code_files(
             self,
             source_paths: List[str],

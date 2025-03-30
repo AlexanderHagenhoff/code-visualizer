@@ -3,11 +3,11 @@ import os
 import hashlib
 from PIL import Image
 
-from src.image_composition.image_concatenator import ImageConcatenator
+from src.main.python.image_composition.image_concatenator import ImageConcatenator
 
 
 class TestImageConcatenator(unittest.TestCase):
-    TEST_DATA_DIR = "test_data/concatenator"
+    TEST_DATA_DIR = "resources/concatenator"
     REFERENCE_HASHES = {
         'empty': '693e9af84d3dfcc71e640e005bdc5e2e',
         'single': '8a98d1fb40ab76530092636750085ea4',
