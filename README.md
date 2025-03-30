@@ -30,10 +30,10 @@
 ## Example Output
 
 - html example 
-*![html_example.png](resources/images/html_example.png)*
+*![html_example.png](src/main/resources/images/html_example.png)*
 
 - spliced image example
-*![image_example.png](resources/images/image_example.png)*
+*![image_example.png](src/main/resources/images/image_example.png)*
 
 ## License
 
