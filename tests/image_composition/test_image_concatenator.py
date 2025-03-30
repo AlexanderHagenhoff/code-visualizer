@@ -35,20 +35,20 @@ class TestImageConcatenator(unittest.TestCase):
     def test_empty_concatenation(self):
         concatenator = ImageConcatenator()
         result = concatenator.concatenate()
-        self.assertEqual( self.REFERENCE_HASHES['empty'], self._calculate_image_hash(result))
+        self.assertEqual(self._calculate_image_hash(result), self.REFERENCE_HASHES['empty'])
 
     def test_single_image(self):
         concatenator = ImageConcatenator(columns=1, max_thumbnail_size=(10, 10))
         concatenator.add_image(self.test_images[0])
         result = concatenator.concatenate()
-        self.assertEqual(self.REFERENCE_HASHES['single'], self._calculate_image_hash(result))
+        self.assertEqual(self._calculate_image_hash(result), self.REFERENCE_HASHES['single'])
 
     def test_grid_layout(self):
         concatenator = ImageConcatenator(columns=2, max_thumbnail_size=(10, 10))
         for img in self.test_images:
             concatenator.add_image(img)
         result = concatenator.concatenate()
-        self.assertEqual(self.REFERENCE_HASHES['grid_2x2'], self._calculate_image_hash(result))
+        self.assertEqual(self._calculate_image_hash(result), self.REFERENCE_HASHES['grid_2x2'])
 
     def test_border(self):
         concatenator = ImageConcatenator()
