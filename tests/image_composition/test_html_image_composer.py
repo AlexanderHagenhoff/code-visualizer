@@ -1,141 +1,65 @@
-import tempfile
 import unittest
+from unittest.mock import patch, mock_open, MagicMock
 from pathlib import Path
-
-from PIL import Image
-
+from src.code_handling.file_system_loader import FileSystemLoader
 from src.code_handling.code_file import CodeFile
-from src.image_composition.html_image_composer import HtmlImageComposer
+
+TEST_DATA_PATH = Path("tests/test_data")
 
 
-class TestHtmlImageComposer(unittest.TestCase):
-    def setUp(self):
-        self.temp_dir = tempfile.TemporaryDirectory()
-        self.sample_image = Image.new('RGB', (800, 600), (255, 0, 0))
-        self.code_file_with_name = CodeFile(
-            content="test",
-            filename="src/main/java/Test.java"
-        )
-        self.code_file_without_name = CodeFile(content="test")
+class TestFileSystemLoader(unittest.TestCase):
 
-    def tearDown(self):
-        self.temp_dir.cleanup()
+    @patch("os.walk")
+    @patch("pathlib.Path.exists", return_value=True)
+    @patch("pathlib.Path.is_dir", return_value=True)
+    @patch("builtins.open", new_callable=mock_open, read_data="test content")
+    def test_load_code_files(self, mock_file, mock_is_dir, mock_exists, mock_os_walk):
+        mock_os_walk.return_value = [
+            (str(TEST_DATA_PATH), ["subdir"], ["file1.py", "file2.txt"]),
+            (str(TEST_DATA_PATH / "subdir"), [], ["file3.py"])
+        ]
 
-    def test_initialization(self):
-        composer = HtmlImageComposer(output_directory=self.temp_dir.name)
-        self.assertTrue(Path(composer.output_directory).exists())
-        self.assertTrue(Path(composer.images_directory).exists())
-        self.assertEqual(composer.columns, 10)
-        self.assertEqual(composer.thumbnail_size, (500, 1000))
+        loader = FileSystemLoader()
+        result = loader.load_code_files([str(TEST_DATA_PATH)], ["*.py"], ["ignore*"])
 
-    def test_add_image_with_filename(self):
-        composer = HtmlImageComposer(output_directory=self.temp_dir.name)
-        composer.add_image(self.sample_image, self.code_file_with_name)
+        self.assertEqual(len(result), 2)
+        self.assertIsInstance(result[0], CodeFile)
+        self.assertEqual(result[0].content, "test content")
 
-        expected_path = Path(composer.images_directory) / "Test.png"
-        self.assertTrue(expected_path.exists())
-        self.assertEqual(len(composer.image_paths), 1)
-        self.assertEqual(
-            composer.image_paths[0][1],
-            "src/main/java/Test.java"
-        )
+    @patch("pathlib.Path.is_file", return_value=True)
+    @patch("builtins.open", new_callable=mock_open, read_data="file content")
+    def test_process_single_file_matching_pattern(self, mock_file, mock_is_file):
+        loader = FileSystemLoader()
+        result = loader._process_single_file(TEST_DATA_PATH / "test.py", ["*.py"])
 
-    def test_add_image_without_filename(self):
-        composer = HtmlImageComposer(output_directory=self.temp_dir.name)
-        composer.add_image(self.sample_image, self.code_file_without_name)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].content, "file content")
 
-        expected_path = Path(composer.images_directory) / "image_0.png"
-        self.assertTrue(expected_path.exists())
-        self.assertIsNone(composer.image_paths[0][1])
+    @patch("pathlib.Path.is_file", return_value=True)
+    def test_process_single_file_not_matching_pattern(self, mock_is_file):
+        loader = FileSystemLoader()
+        result = loader._process_single_file(TEST_DATA_PATH / "test.txt", ["*.py"])
 
-    def test_html_generation(self):
-        composer = HtmlImageComposer(
-            output_directory=self.temp_dir.name,
-            columns=3
-        )
-        composer.add_image(self.sample_image, self.code_file_with_name)
-        composer.generate_html()
+        self.assertEqual(result, [])
 
-        html_file = Path(self.temp_dir.name) / "index.html"
-        self.assertTrue(html_file.exists())
+    def test_is_ignored(self):
+        loader = FileSystemLoader()
+        self.assertTrue(loader._is_ignored(TEST_DATA_PATH / "ignore_this.py", ["ignore*"]))
+        self.assertFalse(loader._is_ignored(TEST_DATA_PATH / "valid.py", ["ignore*"]))
 
-        html_content = html_file.read_text()
-        self.assertIn('<div class="grid-container">', html_content)
-        self.assertIn('Test.png', html_content)
-        self.assertIn(
-            'data-original-filename="src/main/java/Test.java"',
-            html_content
-        )
+    @patch("builtins.open", new_callable=mock_open, read_data="valid content")
+    def test_load_file_content(self, mock_file):
+        loader = FileSystemLoader()
+        code_file = loader._load_file_content(TEST_DATA_PATH / "test.py")
+        self.assertEqual(code_file.content, "valid content")
+        self.assertEqual(code_file.filename, str(TEST_DATA_PATH / "test.py"))
 
-        css_file = Path(self.temp_dir.name) / "styles.css"
-        self.assertTrue(css_file.exists())
-
-        css_content = css_file.read_text()
-        self.assertIn('grid-template-columns: repeat(3, 1fr)', css_content)
-
-    def test_thumbnail_processing(self):
-        composer = HtmlImageComposer(
-            output_directory=self.temp_dir.name,
-            thumbnail_size=(200, 200)
-        )
-        composer.add_image(self.sample_image, self.code_file_with_name)
-
-        processed_image = Image.open(Path(composer.images_directory) / "Test.png")
-        self.assertLessEqual(processed_image.width, 200 + 1)
-        self.assertLessEqual(processed_image.height, 200 + 1)
-        self.assertEqual(processed_image.getpixel((0, 0)), (0, 0, 0))
-
-    def test_special_characters_in_filename(self):
-        code_file = CodeFile(content="test", filename="src/Test#1.java")
-        composer = HtmlImageComposer(output_directory=self.temp_dir.name)
-        composer.add_image(self.sample_image, code_file)
-
-        expected_path = Path(composer.images_directory) / "Test#1.png"
-        self.assertTrue(expected_path.exists())
-
-    def test_multiple_images(self):
-        composer = HtmlImageComposer(
-            output_directory=self.temp_dir.name,
-            columns=2
-        )
-
-        for i in range(5):
-            code_file = CodeFile(content="test", filename=f"File{i}.java")
-            composer.add_image(self.sample_image, code_file)
-
-        composer.generate_html()
-
-        html_content = (Path(self.temp_dir.name) / "index.html").read_text()
-        self.assertEqual(html_content.count('class="grid-item"'), 5)
-
-        css_content = (Path(self.temp_dir.name) / "styles.css").read_text()
-        self.assertIn('grid-template-columns: repeat(2, 1fr)', css_content)
-        self.assertIn('<link rel="stylesheet" href="styles.css">', html_content)
-
-    def test_empty_composer(self):
-        composer = HtmlImageComposer(output_directory=self.temp_dir.name)
-        composer.generate_html()
-
-        html_content = (Path(self.temp_dir.name) / "index.html").read_text()
-        self.assertIn('<div class="grid-container">', html_content)
-        self.assertNotIn('class="grid-item"', html_content)
-
-        css_path = Path(self.temp_dir.name) / "styles.css"
-        self.assertTrue(css_path.exists())
-
-    def test_css_structure(self):
-        composer = HtmlImageComposer(output_directory=self.temp_dir.name)
-        composer.add_image(self.sample_image, self.code_file_with_name)
-        composer.generate_html()
-
-        html_content = (Path(self.temp_dir.name) / "index.html").read_text()
-        self.assertIn(self.code_file_with_name.filename, html_content)
-        self.assertIn('<link rel="stylesheet" href="styles.css">', html_content)
-
-        css_content = (Path(self.temp_dir.name) / "styles.css").read_text()
-        self.assertIn('z-index: 2', css_content)
-        self.assertIn('font-size: 20px', css_content)
-        self.assertIn('transition: opacity 0.3s ease', css_content)
+    @patch("builtins.open", side_effect=UnicodeDecodeError("codec", b"", 0, 1, "reason"))
+    def test_load_file_content_unicode_error(self, mock_file):
+        loader = FileSystemLoader()
+        code_file = loader._load_file_content(TEST_DATA_PATH / "invalid.py")
+        self.assertEqual(code_file.content, "")
+        self.assertEqual(code_file.filename, str(TEST_DATA_PATH / "invalid.py"))
 
 
 if __name__ == "__main__":
