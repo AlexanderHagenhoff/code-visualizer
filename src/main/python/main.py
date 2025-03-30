@@ -1,6 +1,6 @@
 from image_composition.html_image_composer import HtmlImageComposer
 from image_generation.code_image_generator import CodeImageGenerator
-from src.main.python.code_handling.file_system_loader import FileSystemLoader
+from src.main.python.code_loading.file_system_loader import FileSystemLoader
 
 
 def sort_images_by_height(images_with_files):

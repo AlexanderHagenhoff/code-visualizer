@@ -4,8 +4,8 @@ import fnmatch
 from typing import List, Optional
 from pathlib import Path
 
-from src.main.python.code_handling.code_file import CodeFile
-from src.main.python.code_handling.code_provider import CodeProvider
+from src.main.python.code_loading.code_file import CodeFile
+from src.main.python.code_loading.code_provider import CodeProvider
 
 
 class GitHubFileLoader(CodeProvider):

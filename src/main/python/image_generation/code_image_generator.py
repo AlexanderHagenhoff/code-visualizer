@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw
 
-from src.main.python.code_handling.code_file import CodeFile
+from src.main.python.code_loading.code_file import CodeFile
 
 
 class CodeImageGenerator:

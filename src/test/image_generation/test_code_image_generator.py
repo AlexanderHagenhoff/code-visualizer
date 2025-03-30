@@ -3,7 +3,7 @@ import unittest
 
 from PIL import Image
 
-from src.main.python.code_handling.code_file import CodeFile
+from src.main.python.code_loading.code_file import CodeFile
 from src.main.python.image_generation.code_image_generator import CodeImageGenerator
 
 

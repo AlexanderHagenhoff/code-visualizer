@@ -2,8 +2,8 @@ import unittest
 from unittest.mock import patch, mock_open
 from pathlib import Path
 
-from src.main.python.code_handling.code_file import CodeFile
-from src.main.python.code_handling.file_system_loader import FileSystemLoader
+from src.main.python.code_loading.code_file import CodeFile
+from src.main.python.code_loading.file_system_loader import FileSystemLoader
 
 TEST_DATA_PATH = Path("test/test_data")
 
