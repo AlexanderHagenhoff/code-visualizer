@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import List
 
-from src.code_handling.code_file import CodeFile
+from src.main.python.code_handling.code_file import CodeFile
 
 
 class CodeProvider:

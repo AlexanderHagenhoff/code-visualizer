@@ -1,11 +1,13 @@
 from pathlib import Path
+
 from PIL import Image
-from src.code_handling.code_file import CodeFile
+
+from src.main.python.code_handling.code_file import CodeFile
 
 
 class HtmlImageComposer:
     IMAGES_DIRECTORY_NAME = "images"
-    TEMPLATES_DIRECTORY_NAME = "../../templates"
+    TEMPLATES_DIRECTORY_NAME = "../../resources/templates"
     DEFAULT_OUTPUT_DIRECTORY_NAME = "output"
     STYLESHEET_FILENAME = "styles.css"
     BASE_TEMPLATE_FILENAME = "base.html"

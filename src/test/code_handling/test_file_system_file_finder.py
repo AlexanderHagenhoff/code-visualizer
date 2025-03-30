@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.code_handling.file_system_file_finder import FileSystemFileFinder
+from src.main.python.code_handling.file_system_file_finder import FileSystemFileFinder
 
 
 class TestFileSystemFileFinder(unittest.TestCase):

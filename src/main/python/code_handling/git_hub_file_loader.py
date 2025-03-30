@@ -3,8 +3,9 @@ import re
 import fnmatch
 from typing import List, Optional
 from pathlib import Path
-from src.code_handling.code_provider import CodeProvider
-from src.code_handling.code_file import CodeFile
+
+from src.main.python.code_handling.code_file import CodeFile
+from src.main.python.code_handling.code_provider import CodeProvider
 
 
 class GitHubFileLoader(CodeProvider):
